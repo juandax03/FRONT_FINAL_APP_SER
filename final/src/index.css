@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-background text-foreground m-0 min-h-screen;
+}
+
+.splash-cursor {
+  @apply pointer-events-none fixed z-50 h-[30px] w-[30px] rounded-full bg-primary opacity-70 mix-blend-screen transition-transform duration-150 ease-out;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary/80 focus:ring-primary;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-secondary/80 focus:ring-secondary;
+  }
+  
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent/80 focus:ring-accent;
+  }
+  
+  .btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600 focus:ring-red-500;
+  }
+  
+  .card {
+    @apply bg-card rounded-lg border border-border p-6 shadow-lg;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+  
+  .table-container {
+    @apply w-full overflow-x-auto rounded-lg border border-border;
+  }
+  
+  .table {
+    @apply w-full border-collapse;
+  }
+  
+  .table th {
+    @apply bg-card px-4 py-3 text-left font-semibold;
+  }
+  
+  .table td {
+    @apply border-t border-border px-4 py-3;
+  }
+  
+  .table tr:hover {
+    @apply bg-card/50;
+  }
+}
