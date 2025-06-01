@@ -1,54 +1,28 @@
-# React + TypeScript + Vite
+# Sistema de Gestión Educativa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Configuración del Proxy para API
 
-Currently, two official plugins are available:
+Este proyecto utiliza un proxy en Vercel para comunicarse con el backend HTTP desde un frontend HTTPS, evitando problemas de bloqueo por parte del navegador.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Estructura del Proxy
 
-## Expanding the ESLint configuration
+- `/api/usuario.js`: Proxy específico para la entidad Usuario
+- `/api/[entity].js`: Proxy dinámico que maneja cualquier entidad y todos los métodos HTTP (GET, POST, PUT, DELETE)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Cómo funciona
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. El frontend hace peticiones a `/api/[entidad]` (por ejemplo, `/api/usuario`)
+2. El servidor de Vercel intercepta estas peticiones y las redirige a través de las funciones serverless en la carpeta `/api`
+3. Estas funciones hacen la petición real al backend HTTP (`http://apifinalsw2025.tryasp.net/api/[entidad]`)
+4. La respuesta se devuelve al frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Ventajas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Evita problemas de CORS y Mixed Content
+- Permite llamar desde HTTPS (frontend) a HTTP (backend)
+- Oculta la URL real del backend al cliente
+- Permite añadir lógica adicional en el proxy si es necesario
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Despliegue
+
+El proyecto está configurado para desplegarse automáticamente en Vercel. Cuando se hace push a la rama principal, Vercel detectará la carpeta `/api` y desplegará las funciones serverless.

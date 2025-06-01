@@ -1,5 +1,5 @@
-// API Base URL
-const API_BASE_URL = 'http://apifinalsw2025.tryasp.net/api';
+// API Base URL - Ahora usamos el proxy local en Vercel
+const API_BASE_URL = '/api';
 
 // Funciones de API
 export const getAll = async (entity) => {
