@@ -1,6 +1,5 @@
 import { memo } from 'react';
 
-// Componente para la lista de entidades
 const EntityList = memo(function EntityList({ entities, onSelectEntity, selectedEntity }) {
   return (
     <div className="entity-list">
