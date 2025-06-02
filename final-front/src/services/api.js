@@ -53,6 +53,7 @@ export const create = async (entity, data) => {
 
 export const update = async (entity, id, data) => {
   try {
+    console.log(`Actualizando ${entity} con ID ${id}:`, data);
     const response = await fetch(`${API_BASE_URL}/${entity}/${id}`, {
       method: 'PUT',
       headers: {
@@ -60,7 +61,10 @@ export const update = async (entity, id, data) => {
       },
       body: JSON.stringify(data)
     });
+    
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error respuesta del servidor:`, errorText);
       throw new Error(`Error al actualizar ${entity} con ID ${id}`);
     }
     return await response.json();
@@ -77,15 +81,32 @@ export const remove = async (entity, id) => {
     }
     
     console.log(`Eliminando ${entity} con ID ${id}`);
-    const response = await fetch(`${API_BASE_URL}/${entity}/${id}`, {
-      method: 'DELETE'
+    
+    // Usar URLSearchParams para asegurar que el ID se pasa correctamente
+    const url = `${API_BASE_URL}/${entity}/${id}`;
+    console.log(`Enviando DELETE a: ${url}`);
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
     
+    console.log(`Respuesta DELETE: ${response.status} ${response.statusText}`);
+    
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Error respuesta del servidor:`, errorText);
-      throw new Error(`Error al eliminar ${entity} con ID ${id}`);
+      let errorMessage = `Error al eliminar ${entity} con ID ${id}: ${response.status} ${response.statusText}`;
+      try {
+        const errorText = await response.text();
+        console.error(`Error respuesta del servidor:`, errorText);
+        errorMessage += ` - ${errorText}`;
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error');
+      }
+      throw new Error(errorMessage);
     }
+    
     return true;
   } catch (error) {
     console.error(`Error al eliminar ${entity} con ID ${id}:`, error);
