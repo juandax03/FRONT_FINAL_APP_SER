@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+    { "source": "/api/:path*", "destination": "http://apifinalsw2025.tryasp.net/api/:path*" }
   ],
   "functions": {
     "api/**/*.js": {

@@ -1,5 +1,5 @@
-// API Base URL - Usamos la URL directa de la API
-const API_BASE_URL = 'http://apifinalsw2025.tryasp.net/api';
+// API Base URL - Usamos el proxy configurado en Vercel
+const API_BASE_URL = '/api';
 
 // Funciones de API
 export const getAll = async (entity) => {
@@ -82,7 +82,6 @@ export const remove = async (entity, id) => {
     
     console.log(`Eliminando ${entity} con ID ${id}`);
     
-    // Usar URLSearchParams para asegurar que el ID se pasa correctamente
     const url = `${API_BASE_URL}/${entity}/${id}`;
     console.log(`Enviando DELETE a: ${url}`);
     
