@@ -45,10 +45,15 @@ export function useEntityData() {
     try {
       // Asegurarse de que los datos no tengan propiedades vacías
       const cleanData = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => 
-          value !== undefined && value !== null && value !== ''
+        Object.entries(data).filter(([key, value]) => 
+          value !== undefined && value !== null && value !== '' || key === 'activo'
         )
       );
+      
+      // Asegurarse de que el campo 'activo' sea un booleano
+      if ('activo' in cleanData) {
+        cleanData.activo = Boolean(cleanData.activo);
+      }
       
       console.log(`Enviando datos para crear ${entity}:`, cleanData);
       await api.create(entity, cleanData);
@@ -75,10 +80,15 @@ export function useEntityData() {
       
       // Limpiar datos antes de enviar
       const cleanData = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => 
-          value !== undefined && value !== null
+        Object.entries(data).filter(([key, value]) => 
+          value !== undefined && value !== null || key === 'activo'
         )
       );
+      
+      // Asegurarse de que el campo 'activo' sea un booleano
+      if ('activo' in cleanData) {
+        cleanData.activo = Boolean(cleanData.activo);
+      }
       
       console.log(`Actualizando ${entity} con ID ${id}:`, cleanData);
       await api.update(entity, id, cleanData);

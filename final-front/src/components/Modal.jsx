@@ -72,11 +72,15 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
   }, [item, mode, entity]);
   
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value, type, checked } = e.target;
     
     // Convertir valores según el tipo
     let processedValue = value;
-    if (type === 'number') {
+    
+    if (type === 'checkbox') {
+      // Para checkboxes, usar el valor de checked (true/false)
+      processedValue = checked;
+    } else if (type === 'number') {
       processedValue = value === '' ? '' : Number(value);
     } else if (name.toLowerCase().includes('fecha')) {
       // Si es un campo de fecha, asegurarse de que sea un formato válido
@@ -87,6 +91,15 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
         }
       } catch (error) {
         console.error('Error al procesar fecha:', error);
+      }
+    } else if (name.toLowerCase() === 'activo') {
+      // Asegurarse de que 'activo' sea siempre un booleano
+      if (value === 'true' || value === true) {
+        processedValue = true;
+      } else if (value === 'false' || value === false) {
+        processedValue = false;
+      } else {
+        processedValue = Boolean(value);
       }
     }
     
@@ -187,7 +200,7 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
               inputType = 'number';
             } else if (field.toLowerCase().includes('fecha')) {
               inputType = 'datetime-local';
-            } else if (typeof item?.[field] === 'boolean') {
+            } else if (typeof item?.[field] === 'boolean' || field.toLowerCase() === 'activo') {
               inputType = 'checkbox';
             } else if (field.toLowerCase() === 'apellido' || 
                        field.toLowerCase() === 'nombre' || 
