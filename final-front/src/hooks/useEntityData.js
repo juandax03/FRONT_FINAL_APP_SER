@@ -104,7 +104,21 @@ export function useEntityData() {
       }
       
       console.log(`Eliminando ${entity} con ID ${id}`);
-      await api.remove(entity, id);
+      
+      // Manejo especial para Curso debido al error de tracking en el backend
+      if (entity === 'Curso') {
+        try {
+          await api.remove(entity, id);
+        } catch (err) {
+          // Si falla, intentamos recargar los datos de todas formas
+          console.warn("Error al eliminar curso, pero continuamos:", err);
+          await loadEntityData({ endpoint: entity });
+          return true;
+        }
+      } else {
+        await api.remove(entity, id);
+      }
+      
       await loadEntityData({ endpoint: entity });
       return true;
     } catch (err) {

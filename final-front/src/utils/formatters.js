@@ -25,6 +25,26 @@ export function formatValue(value) {
     }
   }
   
+  // Manejo de objetos anidados
+  if (typeof value === 'object' && value !== null) {
+    // Para objetos de Modalidad
+    if (value.nombre !== undefined) {
+      return value.nombre;
+    }
+    // Para objetos de NivelDificultad
+    if (value.nivelDificultadId !== undefined) {
+      return `${value.nombre || 'Nivel'} (${value.ordanilidad || 0})`;
+    }
+    // Para cualquier otro objeto, mostrar una propiedad clave si existe
+    const keyProps = ['nombre', 'name', 'title', 'descripcion', 'id'];
+    for (const prop of keyProps) {
+      if (value[prop] !== undefined) {
+        return value[prop];
+      }
+    }
+    return JSON.stringify(value);
+  }
+  
   return String(value);
 }
 
