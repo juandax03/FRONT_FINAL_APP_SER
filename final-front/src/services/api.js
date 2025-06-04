@@ -1,5 +1,7 @@
-// API Base URL - Usamos el proxy configurado en Vercel
-const API_BASE_URL = '/api';
+// API Base URL - Configuración para desarrollo y producción
+const API_BASE_URL = import.meta.env.PROD 
+  ? '/api' 
+  : 'https://app-servicios-web-back.onrender.com';
 
 // Funciones de API
 export const getAll = async (entity) => {

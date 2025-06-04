@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/:path*", "destination": "https://app-servicios-web-back.onrender.com/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
