@@ -123,7 +123,16 @@ export function useEntityData() {
       
       // Asegurarse de que el campo 'activo' sea un booleano
       if ('activo' in cleanData) {
-        cleanData.activo = Boolean(cleanData.activo);
+        // Forzar a que sea exactamente true o false
+        cleanData.activo = cleanData.activo === true;
+        console.log('Campo activo en updateItem:', cleanData.activo);
+      }
+      
+      // Incluir el ID en los datos para asegurar que el backend lo reconozca
+      if (entity === 'Modalidad') {
+        cleanData.modalidadId = Number(id);
+      } else if (entity === 'NivelDificultad') {
+        cleanData.nivelId = Number(id);
       }
       
       // Manejar casos especiales por entidad

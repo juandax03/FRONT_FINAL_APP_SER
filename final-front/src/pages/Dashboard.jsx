@@ -139,12 +139,32 @@ const Dashboard = () => {
         if (idField) {
           id = currentItem[idField];
         } 
-        // Si no lo encuentra, buscar un campo que contenga el nombre de la entidad + id
+        // Si no lo encuentra, buscar campos específicos según la entidad
         else {
-          const entityIdField = Object.keys(currentItem).find(key => 
-            key.toLowerCase() === selectedEntity.endpoint.toLowerCase() + 'id' || 
-            key.toLowerCase() === 'usuarioid');
-          id = entityIdField ? currentItem[entityIdField] : undefined;
+          console.log(`Buscando ID para actualizar ${selectedEntity.endpoint}:`, currentItem);
+          
+          // Buscar campos específicos por entidad
+          if (selectedEntity.endpoint === 'NivelDificultad') {
+            id = currentItem.nivelId;
+            console.log(`ID encontrado para actualizar NivelDificultad:`, id);
+          } else if (selectedEntity.endpoint === 'Modalidad') {
+            id = currentItem.modalidadId;
+          } else if (selectedEntity.endpoint === 'Curso') {
+            id = currentItem.cursoId;
+          } else if (selectedEntity.endpoint === 'Usuario') {
+            id = currentItem.usuarioId;
+          } else if (selectedEntity.endpoint === 'Rol') {
+            id = currentItem.rolId;
+          } else if (selectedEntity.endpoint === 'Ciudad') {
+            id = currentItem.ciudadId;
+          } else {
+            // Buscar por patrón de nombre
+            const entityIdField = Object.keys(currentItem).find(key => 
+              key.toLowerCase().includes(selectedEntity.endpoint.toLowerCase() + 'id') || 
+              key.toLowerCase() === 'usuarioid');
+            
+            id = entityIdField ? currentItem[entityIdField] : undefined;
+          }
         }
         
         if (id) {

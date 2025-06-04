@@ -119,8 +119,18 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Enviando datos:', formData); // Para depuración
-    onSave(formData);
+    
+    // Asegurarse de que los campos booleanos sean realmente booleanos
+    const finalData = {...formData};
+    
+    // Verificar si hay un campo 'activo' y asegurarse de que sea booleano
+    if ('activo' in finalData) {
+      finalData.activo = finalData.activo === true;
+      console.log('Campo activo ajustado a:', finalData.activo);
+    }
+    
+    console.log('Enviando datos:', finalData); // Para depuración
+    onSave(finalData);
   };
   
   // Si es modo eliminar, mostrar confirmación
@@ -229,7 +239,10 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
                     checked={formData[field] === true}
                     onChange={(e) => {
                       console.log(`Checkbox ${field} cambiado a:`, e.target.checked);
-                      setFormData({...formData, [field]: e.target.checked});
+                      // Asegurarse de que el valor sea un booleano verdadero o falso
+                      const newValue = e.target.checked === true;
+                      console.log(`Valor final para ${field}:`, newValue);
+                      setFormData({...formData, [field]: newValue});
                     }}
                     disabled={isIdField}
                     className={isIdField ? 'disabled-input' : ''}
