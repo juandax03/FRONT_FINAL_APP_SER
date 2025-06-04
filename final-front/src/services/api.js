@@ -1,11 +1,10 @@
-// API Base URL - Configuración para desarrollo y producción
-const API_BASE_URL = import.meta.env.PROD 
-  ? '/api' 
-  : 'https://app-servicios-web-back.onrender.com';
+// URL correcta del backend
+const API_BASE_URL = 'http://apifinalsw2025.tryasp.net/api';
 
 // Funciones de API
 export const getAll = async (entity) => {
   try {
+    console.log(`Obteniendo ${entity} desde: ${API_BASE_URL}/${entity}`);
     const response = await fetch(`${API_BASE_URL}/${entity}`);
     if (!response.ok) {
       throw new Error(`Error al obtener ${entity}`);
