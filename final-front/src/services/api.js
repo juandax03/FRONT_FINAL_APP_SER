@@ -1,10 +1,9 @@
-// URL correcta del backend
-const API_BASE_URL = 'http://apifinalsw2025.tryasp.net/api';
+// API Base URL - Usamos el proxy configurado en Vercel
+const API_BASE_URL = '/api';
 
 // Funciones de API
 export const getAll = async (entity) => {
   try {
-    console.log(`Obteniendo ${entity} desde: ${API_BASE_URL}/${entity}`);
     const response = await fetch(`${API_BASE_URL}/${entity}`);
     if (!response.ok) {
       throw new Error(`Error al obtener ${entity}`);
