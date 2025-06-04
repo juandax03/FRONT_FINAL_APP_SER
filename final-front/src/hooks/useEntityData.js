@@ -71,6 +71,12 @@ export function useEntityData() {
         if (cleanData.modalidadId) {
           cleanData.modalidadId = Number(cleanData.modalidadId);
         }
+        if (cleanData.categoriaId) {
+          cleanData.categoriaId = Number(cleanData.categoriaId);
+        }
+        if (cleanData.nivelId) {
+          cleanData.nivelId = Number(cleanData.nivelId);
+        }
         if (cleanData.duracionHoras) {
           cleanData.duracionHoras = Number(cleanData.duracionHoras);
         }
@@ -150,6 +156,12 @@ export function useEntityData() {
         // Convertir campos numéricos
         if (cleanData.modalidadId) {
           cleanData.modalidadId = Number(cleanData.modalidadId);
+        }
+        if (cleanData.categoriaId) {
+          cleanData.categoriaId = Number(cleanData.categoriaId);
+        }
+        if (cleanData.nivelId) {
+          cleanData.nivelId = Number(cleanData.nivelId);
         }
         if (cleanData.duracionHoras) {
           cleanData.duracionHoras = Number(cleanData.duracionHoras);

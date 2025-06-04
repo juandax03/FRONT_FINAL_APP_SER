@@ -58,8 +58,12 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
         } else if (entity.name === 'Curso') {
           initialData.nombre = '';
           initialData.descripcion = '';
-          initialData.precio = 0;
+          initialData.costo = 0;
+          initialData.duracionHoras = 0;
+          initialData.codigoCurso = '';
           initialData.modalidadId = 1;
+          initialData.categoriaId = 1;
+          initialData.nivelId = 1;
         } else {
           // Para otras entidades, inicializar con campos vacíos básicos
           initialData.nombre = '';
@@ -187,6 +191,8 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
       fields = ['nombreRol']; // Solo nombreRol, no incluir rolId
     } else if (entity.name === 'Ciudad') {
       fields = ['nombre'];
+    } else if (entity.name === 'Curso') {
+      fields = ['nombre', 'descripcion', 'codigoCurso', 'costo', 'duracionHoras', 'modalidadId', 'categoriaId', 'nivelId'];
     } else {
       fields = ['nombre', 'descripcion'];
     }
@@ -202,19 +208,28 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
             // No mostrar campos de ID en formularios de creación
             if (mode === 'create' && (
                 field.toLowerCase() === 'id' || 
+                field.toLowerCase() === 'cursoid' ||
                 (entity?.name === 'Rol' && field.toLowerCase() === 'rolid')
-            )) {
+            ) && 
+                field.toLowerCase() !== 'categoriaid' && 
+                field.toLowerCase() !== 'nivelid' && 
+                field.toLowerCase() !== 'modalidadid') {
               return null;
             }
             
             // Determinar si el campo debe estar deshabilitado (campos de ID)
             const isIdField = field.toLowerCase() === 'id' || 
-                             (field.toLowerCase().endsWith('id') && field.toLowerCase() !== 'rolid');
+                             (field.toLowerCase().endsWith('id') && 
+                              field.toLowerCase() !== 'rolid' && 
+                              field.toLowerCase() !== 'categoriaid' && 
+                              field.toLowerCase() !== 'nivelid' && 
+                              field.toLowerCase() !== 'modalidadid');
             
             // Determinar el tipo de input según el nombre del campo
             let inputType = 'text';
             if (field.toLowerCase() === 'id' || 
-                (field.toLowerCase().endsWith('id') && field.toLowerCase() !== 'rolid')) {
+                (field.toLowerCase().endsWith('id') && 
+                 field.toLowerCase() !== 'rolid')) {
               inputType = 'number';
             } else if (field.toLowerCase().includes('fecha')) {
               inputType = 'datetime-local';
