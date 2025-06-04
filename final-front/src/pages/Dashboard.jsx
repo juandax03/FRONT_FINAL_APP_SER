@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [modalMode, setModalMode] = useState('create'); // 'create', 'edit', 'delete'
   const [currentItem, setCurrentItem] = useState(null);
   const [user, setUser] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
 
   // Verificar autenticación
   useEffect(() => {
@@ -23,6 +24,12 @@ const Dashboard = () => {
         const session = await fetchAuthSession();
         const userData = await getCurrentUser();
         setUser(userData);
+        
+        // Obtener el email del token
+        if (session.tokens && session.tokens.idToken) {
+          const payload = session.tokens.idToken.payload;
+          setUserEmail(payload.email || userData.username || 'Usuario');
+        }
       } catch (error) {
         console.log('No hay sesión activa, redirigiendo a login');
         window.location.href = '/login';
@@ -190,7 +197,7 @@ const Dashboard = () => {
           <p>Panel de Administración</p>
         </div>
         <div className="user-info">
-          <span>{user.username || 'Usuario'}</span>
+          <span>{userEmail}</span>
           <button className="btn-logout" onClick={handleSignOut}>
             Cerrar Sesión
           </button>
@@ -239,7 +246,7 @@ const Dashboard = () => {
             </>
           ) : (
             <div className="welcome">
-              <h2>¡Bienvenido, {user.username || 'Usuario'}!</h2>
+              <h2>¡Bienvenido, {userEmail.split('@')[0] || 'Usuario'}!</h2>
               <p>Selecciona una entidad del menú lateral para comenzar.</p>
             </div>
           )}

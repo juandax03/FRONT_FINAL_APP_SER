@@ -1,11 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "http://apifinalsw2025.tryasp.net/api/:path*" }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  }
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

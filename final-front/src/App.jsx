@@ -14,8 +14,13 @@ function App() {
     const checkAuth = async () => {
       try {
         const session = await fetchAuthSession();
-        setIsAuthenticated(!!session.tokens);
+        // Verificar si hay tokens válidos en la sesión
+        if (session && session.tokens) {
+          setIsAuthenticated(true);
+          console.log("Usuario autenticado correctamente");
+        }
       } catch (error) {
+        console.log("Error de autenticación:", error);
         setIsAuthenticated(false);
       } finally {
         setAuthChecked(true);
@@ -23,6 +28,19 @@ function App() {
     };
 
     checkAuth();
+  }, []);
+
+  // Verificar la URL para detectar el código de autenticación
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code) {
+      console.log("Código de autenticación detectado, redirigiendo...");
+      // Limpiar la URL y redirigir al dashboard
+      window.history.replaceState({}, document.title, "/dashboard");
+      setIsAuthenticated(true);
+    }
   }, []);
 
   if (!authChecked) {
@@ -38,8 +56,10 @@ function App() {
       <Cursor />
       <Routes>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+        {/* Ruta comodín para manejar todas las demás rutas */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
