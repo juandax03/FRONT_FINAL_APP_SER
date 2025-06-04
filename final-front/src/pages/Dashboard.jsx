@@ -100,14 +100,29 @@ const Dashboard = () => {
     
     try {
       console.log(`Editando ${selectedEntity.endpoint} con ID:`, id);
-      const item = await getItemById(selectedEntity.endpoint, id);
-      if (item) {
-        console.log("Item cargado para editar:", item);
-        setCurrentItem(item);
-        setModalMode('edit');
-        setModalOpen(true);
+      
+      // Verificar si estamos editando un curso y asegurarnos de usar el ID correcto
+      if (selectedEntity.endpoint === 'Curso' && typeof id === 'number') {
+        console.log(`Usando ID específico para Curso: ${id}`);
+        const item = await getItemById(selectedEntity.endpoint, id);
+        if (item) {
+          console.log("Item cargado para editar:", item);
+          setCurrentItem(item);
+          setModalMode('edit');
+          setModalOpen(true);
+        } else {
+          console.error(`No se pudo cargar el Curso con ID ${id}`);
+        }
       } else {
-        console.error(`No se pudo cargar el item con ID ${id}`);
+        const item = await getItemById(selectedEntity.endpoint, id);
+        if (item) {
+          console.log("Item cargado para editar:", item);
+          setCurrentItem(item);
+          setModalMode('edit');
+          setModalOpen(true);
+        } else {
+          console.error(`No se pudo cargar el item con ID ${id}`);
+        }
       }
     } catch (err) {
       console.error("Error al cargar item para editar:", err);

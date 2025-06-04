@@ -56,7 +56,9 @@ export function getItemId(item) {
   // Si no lo encuentra, buscar campos específicos según la entidad
   if (!idField) {
     // Buscar campos específicos por entidad
-    if ('nivelDificultadId' in item) {
+    if ('nivelId' in item) {
+      idField = 'nivelId';
+    } else if ('nivelDificultadId' in item) {
       idField = 'nivelDificultadId';
     } else if ('modalidadId' in item) {
       idField = 'modalidadId';

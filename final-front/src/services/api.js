@@ -17,11 +17,18 @@ export const getAll = async (entity) => {
 
 export const getById = async (entity, id) => {
   try {
+    console.log(`Obteniendo ${entity} con ID ${id}`);
     const response = await fetch(`${API_BASE_URL}/${entity}/${id}`);
+    
     if (!response.ok) {
-      throw new Error(`Error al obtener ${entity} con ID ${id}`);
+      const errorText = await response.text();
+      console.error(`Error al obtener ${entity} con ID ${id}:`, errorText);
+      throw new Error(`Error al obtener ${entity} con ID ${id}: ${response.status} ${response.statusText}`);
     }
-    return await response.json();
+    
+    const data = await response.json();
+    console.log(`Datos obtenidos para ${entity} con ID ${id}:`, data);
+    return data;
   } catch (error) {
     console.error(`Error al obtener ${entity} con ID ${id}:`, error);
     throw error;
