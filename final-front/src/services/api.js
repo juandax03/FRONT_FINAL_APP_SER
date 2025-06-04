@@ -82,7 +82,15 @@ export const remove = async (entity, id) => {
     
     console.log(`Eliminando ${entity} con ID ${id}`);
     
-    const url = `${API_BASE_URL}/${entity}/${id}`;
+    // Manejo especial para NivelDificultad
+    let url;
+    if (entity === 'NivelDificultad') {
+      url = `${API_BASE_URL}/NivelDificultad/${id}`;
+      console.log(`Usando URL especial para NivelDificultad: ${url}`);
+    } else {
+      url = `${API_BASE_URL}/${entity}/${id}`;
+    }
+    
     console.log(`Enviando DELETE a: ${url}`);
     
     const response = await fetch(url, {

@@ -153,6 +153,10 @@ export function useEntityData() {
         if (cleanData.ordanilidad) {
           cleanData.ordanilidad = Number(cleanData.ordanilidad);
         }
+        // Asegurarse de que nivelId esté presente para actualizaciones
+        if (!cleanData.nivelId && id) {
+          cleanData.nivelId = Number(id);
+        }
       }
       
       // Convertir objetos anidados de string JSON a objetos reales

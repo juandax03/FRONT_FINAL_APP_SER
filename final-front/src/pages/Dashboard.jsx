@@ -170,8 +170,8 @@ const Dashboard = () => {
           
           // Buscar campos específicos por entidad
           if (selectedEntity.endpoint === 'NivelDificultad') {
-            // Para NivelDificultad, buscar específicamente el campo nivelDificultadId
-            id = currentItem.nivelDificultadId;
+            // Para NivelDificultad, buscar específicamente el campo nivelId
+            id = currentItem.nivelId;
             console.log(`ID encontrado para NivelDificultad:`, id);
           } else if (selectedEntity.endpoint === 'Modalidad') {
             id = currentItem.modalidadId;
