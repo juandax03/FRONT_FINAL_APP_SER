@@ -53,12 +53,28 @@ export function getItemId(item) {
   // Primero buscar un campo que sea exactamente 'id'
   let idField = Object.keys(item).find(key => key.toLowerCase() === 'id');
   
-  // Si no lo encuentra, buscar un campo que termine con 'id' y no sea 'rolid'
+  // Si no lo encuentra, buscar campos específicos según la entidad
   if (!idField) {
-    idField = Object.keys(item).find(key => 
-      key.toLowerCase().endsWith('id') && 
-      key.toLowerCase() !== 'rolid'
-    );
+    // Buscar campos específicos por entidad
+    if ('nivelDificultadId' in item) {
+      idField = 'nivelDificultadId';
+    } else if ('modalidadId' in item) {
+      idField = 'modalidadId';
+    } else if ('cursoId' in item) {
+      idField = 'cursoId';
+    } else if ('rolId' in item && !('usuarioId' in item)) {
+      idField = 'rolId';
+    } else if ('usuarioId' in item) {
+      idField = 'usuarioId';
+    } else if ('ciudadId' in item) {
+      idField = 'ciudadId';
+    } else {
+      // Si no encuentra campos específicos, buscar cualquier campo que termine con 'id'
+      idField = Object.keys(item).find(key => 
+        key.toLowerCase().endsWith('id') && 
+        key.toLowerCase() !== 'rolid'
+      );
+    }
   }
   
   // Si aún no lo encuentra, usar cualquier campo que contenga 'id'

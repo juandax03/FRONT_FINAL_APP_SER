@@ -99,11 +99,15 @@ const Dashboard = () => {
     if (!selectedEntity) return;
     
     try {
+      console.log(`Editando ${selectedEntity.endpoint} con ID:`, id);
       const item = await getItemById(selectedEntity.endpoint, id);
       if (item) {
+        console.log("Item cargado para editar:", item);
         setCurrentItem(item);
         setModalMode('edit');
         setModalOpen(true);
+      } else {
+        console.error(`No se pudo cargar el item con ID ${id}`);
       }
     } catch (err) {
       console.error("Error al cargar item para editar:", err);
@@ -162,11 +166,18 @@ const Dashboard = () => {
         } 
         // Si no lo encuentra, buscar campos específicos según la entidad
         else {
-          const entityIdField = Object.keys(currentItem).find(key => 
-            key.toLowerCase() === selectedEntity.endpoint.toLowerCase() + 'id' || 
-            key.toLowerCase() === 'rolid' ||
-            key.toLowerCase() === 'usuarioid');
-          id = entityIdField ? currentItem[entityIdField] : undefined;
+          // Buscar campos específicos por entidad
+          if (selectedEntity.endpoint === 'NivelDificultad' && currentItem.nivelDificultadId) {
+            id = currentItem.nivelDificultadId;
+          } else if (selectedEntity.endpoint === 'Modalidad' && currentItem.modalidadId) {
+            id = currentItem.modalidadId;
+          } else {
+            const entityIdField = Object.keys(currentItem).find(key => 
+              key.toLowerCase() === selectedEntity.endpoint.toLowerCase() + 'id' || 
+              key.toLowerCase() === 'rolid' ||
+              key.toLowerCase() === 'usuarioid');
+            id = entityIdField ? currentItem[entityIdField] : undefined;
+          }
         }
         
         if (id) {

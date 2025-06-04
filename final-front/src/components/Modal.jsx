@@ -101,6 +101,14 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
       } else {
         processedValue = Boolean(value);
       }
+    } else if (typeof formData[name] === 'object' && formData[name] !== null) {
+      // Intentar parsear JSON para objetos anidados
+      try {
+        processedValue = JSON.parse(value);
+      } catch (error) {
+        console.error(`Error al parsear JSON para el campo ${name}:`, error);
+        // Si falla el parseo, mantener el valor como string
+      }
     }
     
     setFormData({
@@ -218,8 +226,11 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
                     type="checkbox"
                     id={field}
                     name={field}
-                    checked={formData[field] || false}
-                    onChange={(e) => setFormData({...formData, [field]: e.target.checked})}
+                    checked={formData[field] === true}
+                    onChange={(e) => {
+                      console.log(`Checkbox ${field} cambiado a:`, e.target.checked);
+                      setFormData({...formData, [field]: e.target.checked});
+                    }}
                     disabled={isIdField}
                     className={isIdField ? 'disabled-input' : ''}
                   />
@@ -228,7 +239,9 @@ const Modal = memo(function Modal({ mode, entity, item, onClose, onSave }) {
                     type={inputType}
                     id={field}
                     name={field}
-                    value={formData[field] !== undefined ? formData[field] : ''}
+                    value={formData[field] !== undefined ? 
+                      (typeof formData[field] === 'object' && formData[field] !== null ? 
+                        JSON.stringify(formData[field]) : formData[field]) : ''}
                     onChange={handleChange}
                     required={!field.toLowerCase().includes('id')}
                     disabled={isIdField}
