@@ -166,27 +166,42 @@ const Dashboard = () => {
         } 
         // Si no lo encuentra, buscar campos específicos según la entidad
         else {
+          console.log(`Buscando ID para ${selectedEntity.endpoint}:`, currentItem);
+          
           // Buscar campos específicos por entidad
-          if (selectedEntity.endpoint === 'NivelDificultad' && currentItem.nivelDificultadId) {
+          if (selectedEntity.endpoint === 'NivelDificultad') {
+            // Para NivelDificultad, buscar específicamente el campo nivelDificultadId
             id = currentItem.nivelDificultadId;
-          } else if (selectedEntity.endpoint === 'Modalidad' && currentItem.modalidadId) {
+            console.log(`ID encontrado para NivelDificultad:`, id);
+          } else if (selectedEntity.endpoint === 'Modalidad') {
             id = currentItem.modalidadId;
+          } else if (selectedEntity.endpoint === 'Curso') {
+            id = currentItem.cursoId;
+          } else if (selectedEntity.endpoint === 'Usuario') {
+            id = currentItem.usuarioId;
+          } else if (selectedEntity.endpoint === 'Rol') {
+            id = currentItem.rolId;
+          } else if (selectedEntity.endpoint === 'Ciudad') {
+            id = currentItem.ciudadId;
           } else {
+            // Buscar por patrón de nombre
             const entityIdField = Object.keys(currentItem).find(key => 
-              key.toLowerCase() === selectedEntity.endpoint.toLowerCase() + 'id' || 
+              key.toLowerCase().includes(selectedEntity.endpoint.toLowerCase() + 'id') || 
               key.toLowerCase() === 'rolid' ||
               key.toLowerCase() === 'usuarioid');
+            
             id = entityIdField ? currentItem[entityIdField] : undefined;
           }
         }
         
         if (id) {
+          console.log(`Eliminando ${selectedEntity.endpoint} con ID:`, id);
           const result = await deleteItem(selectedEntity.endpoint, id);
           if (result) {
             setModalOpen(false);
           }
         } else {
-          console.error("No se pudo encontrar el ID para eliminar");
+          console.error(`No se pudo encontrar el ID para eliminar en ${selectedEntity.endpoint}`, currentItem);
         }
       }
     } catch (err) {

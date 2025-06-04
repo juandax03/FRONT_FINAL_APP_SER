@@ -55,6 +55,42 @@ export function useEntityData() {
         cleanData.activo = Boolean(cleanData.activo);
       }
       
+      // Manejar casos especiales por entidad
+      if (entity === 'Usuario') {
+        // Asegurarse de que rolId sea un número
+        if (cleanData.rolId) {
+          cleanData.rolId = Number(cleanData.rolId);
+        }
+        
+        // Validar email
+        if (cleanData.email && !cleanData.email.includes('@')) {
+          throw new Error('El email debe tener un formato válido');
+        }
+      } else if (entity === 'Curso') {
+        // Convertir campos numéricos
+        if (cleanData.modalidadId) {
+          cleanData.modalidadId = Number(cleanData.modalidadId);
+        }
+        if (cleanData.duracionHoras) {
+          cleanData.duracionHoras = Number(cleanData.duracionHoras);
+        }
+        if (cleanData.costo) {
+          cleanData.costo = Number(cleanData.costo);
+        }
+      }
+      
+      // Convertir objetos anidados de string JSON a objetos reales
+      Object.keys(cleanData).forEach(key => {
+        if (typeof cleanData[key] === 'string' && 
+            (cleanData[key].startsWith('{') || cleanData[key].startsWith('['))) {
+          try {
+            cleanData[key] = JSON.parse(cleanData[key]);
+          } catch (e) {
+            console.warn(`No se pudo parsear el campo ${key} como JSON:`, e);
+          }
+        }
+      });
+      
       console.log(`Enviando datos para crear ${entity}:`, cleanData);
       await api.create(entity, cleanData);
       await loadEntityData({ endpoint: entity });
@@ -89,6 +125,47 @@ export function useEntityData() {
       if ('activo' in cleanData) {
         cleanData.activo = Boolean(cleanData.activo);
       }
+      
+      // Manejar casos especiales por entidad
+      if (entity === 'Usuario') {
+        // Asegurarse de que rolId sea un número
+        if (cleanData.rolId) {
+          cleanData.rolId = Number(cleanData.rolId);
+        }
+        
+        // Validar email
+        if (cleanData.email && !cleanData.email.includes('@')) {
+          throw new Error('El email debe tener un formato válido');
+        }
+      } else if (entity === 'Curso') {
+        // Convertir campos numéricos
+        if (cleanData.modalidadId) {
+          cleanData.modalidadId = Number(cleanData.modalidadId);
+        }
+        if (cleanData.duracionHoras) {
+          cleanData.duracionHoras = Number(cleanData.duracionHoras);
+        }
+        if (cleanData.costo) {
+          cleanData.costo = Number(cleanData.costo);
+        }
+      } else if (entity === 'NivelDificultad') {
+        // Asegurarse de que ordanilidad sea un número
+        if (cleanData.ordanilidad) {
+          cleanData.ordanilidad = Number(cleanData.ordanilidad);
+        }
+      }
+      
+      // Convertir objetos anidados de string JSON a objetos reales
+      Object.keys(cleanData).forEach(key => {
+        if (typeof cleanData[key] === 'string' && 
+            (cleanData[key].startsWith('{') || cleanData[key].startsWith('['))) {
+          try {
+            cleanData[key] = JSON.parse(cleanData[key]);
+          } catch (e) {
+            console.warn(`No se pudo parsear el campo ${key} como JSON:`, e);
+          }
+        }
+      });
       
       console.log(`Actualizando ${entity} con ID ${id}:`, cleanData);
       await api.update(entity, id, cleanData);
