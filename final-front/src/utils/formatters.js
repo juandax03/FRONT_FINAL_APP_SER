@@ -50,40 +50,45 @@ export function formatValue(value) {
 
 // Obtiene el ID de un item
 export function getItemId(item) {
-  // Primero buscar un campo que sea exactamente 'id'
-  let idField = Object.keys(item).find(key => key.toLowerCase() === 'id');
+  // Verificar campos específicos primero para mayor precisión
+  if ('cursoId' in item) {
+    console.log("ID encontrado (cursoId):", item.cursoId);
+    return item.cursoId;
+  } else if ('nivelId' in item) {
+    return item.nivelId;
+  } else if ('nivelDificultadId' in item) {
+    return item.nivelDificultadId;
+  } else if ('modalidadId' in item) {
+    return item.modalidadId;
+  } else if ('rolId' in item && !('usuarioId' in item)) {
+    return item.rolId;
+  } else if ('usuarioId' in item) {
+    return item.usuarioId;
+  } else if ('ciudadId' in item) {
+    return item.ciudadId;
+  }
   
-  // Si no lo encuentra, buscar campos específicos según la entidad
-  if (!idField) {
-    // Buscar campos específicos por entidad
-    if ('nivelId' in item) {
-      idField = 'nivelId';
-    } else if ('nivelDificultadId' in item) {
-      idField = 'nivelDificultadId';
-    } else if ('modalidadId' in item) {
-      idField = 'modalidadId';
-    } else if ('cursoId' in item) {
-      idField = 'cursoId';
-    } else if ('rolId' in item && !('usuarioId' in item)) {
-      idField = 'rolId';
-    } else if ('usuarioId' in item) {
-      idField = 'usuarioId';
-    } else if ('ciudadId' in item) {
-      idField = 'ciudadId';
-    } else {
-      // Si no encuentra campos específicos, buscar cualquier campo que termine con 'id'
-      idField = Object.keys(item).find(key => 
-        key.toLowerCase().endsWith('id') && 
-        key.toLowerCase() !== 'rolid'
-      );
-    }
+  // Buscar un campo que sea exactamente 'id'
+  const idField = Object.keys(item).find(key => key.toLowerCase() === 'id');
+  if (idField) {
+    return item[idField];
+  }
+  
+  // Si no encuentra campos específicos, buscar cualquier campo que termine con 'id'
+  const endWithIdField = Object.keys(item).find(key => 
+    key.toLowerCase().endsWith('id') && 
+    key.toLowerCase() !== 'rolid'
+  );
+  if (endWithIdField) {
+    return item[endWithIdField];
   }
   
   // Si aún no lo encuentra, usar cualquier campo que contenga 'id'
-  if (!idField) {
-    idField = Object.keys(item).find(key => key.toLowerCase().includes('id'));
+  const containsIdField = Object.keys(item).find(key => key.toLowerCase().includes('id'));
+  if (containsIdField) {
+    return item[containsIdField];
   }
   
-  console.log("ID encontrado:", idField, item[idField]);
-  return item[idField];
+  console.log("No se encontró ID para:", item);
+  return null;
 }

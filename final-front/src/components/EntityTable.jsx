@@ -28,7 +28,12 @@ const EntityTable = memo(function EntityTable({ data, onEdit, onDelete }) {
                 <td key={column}>{formatValue(item[column])}</td>
               ))}
               <td className="actions">
-                <button className="btn-edit" onClick={() => onEdit(getItemId(item))}>
+                <button className="btn-edit" onClick={() => {
+                  // Usar directamente el ID específico para cursos
+                  const id = item.cursoId || getItemId(item);
+                  console.log("ID para editar:", id, item);
+                  onEdit(id);
+                }}>
                   Editar
                 </button>
                 <button className="btn-delete" onClick={() => onDelete(item)}>
